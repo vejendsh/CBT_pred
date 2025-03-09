@@ -3,6 +3,7 @@ wandb/
 
 # Virtual environments
 .venv/
+venv/
 
 # IDE-specific files
 .idea/
