@@ -11,6 +11,7 @@
 #define evaporativehtc 102.79
 
 #define ambienttemperature Get_Input_Parameter("T_amb") - 273.15
+#define HR Get_Input_Parameter("exp1")
 
 
 real core_tempa;

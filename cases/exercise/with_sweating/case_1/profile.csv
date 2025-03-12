@@ -1,0 +1,7 @@
+[Name]
+transient-temperature
+[Data]
+time,temperature
+0,320
+1000,350
+2000,400

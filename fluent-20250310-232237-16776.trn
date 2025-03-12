@@ -1,0 +1,46 @@
+Auto-Transcript Start Time:  23:22:37, 10 Mar 2025 Eastern Daylight Time 
+Current Directory: "C:\Users\Research\Desktop\CBT_pred"
+Information: The server has started and is running.
+
+              Welcome to ANSYS Fluent 2024 R2
+
+              Copyright 1987-2024 ANSYS, Inc. All Rights Reserved.
+              Unauthorized use, distribution or duplication is prohibited.
+              This product is subject to U.S. laws governing export and re-export.
+              For full Legal Notice, see documentation.
+
+Build Time: May 13 2024 11:21:01 EST  Build Id: 10192  
+ 
+Connected License Server List:	1055@police.ceas1.uc.edu
+
+*********************************************
+Info: Your license enables 4-way parallel execution.
+For faster simulations, please start the application with the appropriate parallel options.
+*********************************************
+
+
+     --------------------------------------------------------------
+     This is an academic version of ANSYS FLUENT. Usage of this product
+     license is limited to the terms and conditions specified in your ANSYS
+     license form, additional terms section.
+     --------------------------------------------------------------
+Host spawning Node 0 on machine "BME-BANER-01" (win64).
+
+-------------------------------------------------------------------------------
+ID    Hostname      Core  O.S.         PID    Vendor                         
+-------------------------------------------------------------------------------
+n0    BME-BANER-01  1/8  Windows-x64  19580  Intel(R) Core(TM) i7-9700      
+host  BME-BANER-01       Windows-x64  7180   Intel(R) Core(TM) i7-9700      
+
+MPI Option Selected: intel
+-------------------------------------------------------------------------------
+
+Cleanup script file is C:\\Users\\Research\\Desktop\\CBT_pred\\cleanup-fluent-BME-BANER-01-7180.bat
+
+> Shutting down Server...
+Services Shutdown...Done.
+Server Shutdown...Done.
+Queue Cleared...Done.
+Shutdown Complete.
+Auto-Transcript Stop Time:  23:23:43, 10 Mar 2025 Eastern Daylight Time 
+Total Transcript Time: 1 Minute 6 Second.

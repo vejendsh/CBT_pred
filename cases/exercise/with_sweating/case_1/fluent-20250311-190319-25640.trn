@@ -1,0 +1,145 @@
+Auto-Transcript Start Time:  19:03:19, 11 Mar 2025 Eastern Daylight Time 
+Current Directory: "C:\Users\Research\Desktop\CBT_pred\cases\exercise\with_sweating\case_1"
+
+              Welcome to ANSYS Fluent 2024 R2
+
+              Copyright 1987-2024 ANSYS, Inc. All Rights Reserved.
+              Unauthorized use, distribution or duplication is prohibited.
+              This product is subject to U.S. laws governing export and re-export.
+              For full Legal Notice, see documentation.
+
+Build Time: May 13 2024 11:21:01 EST  Build Id: 10192  
+ 
+Connected License Server List:	1055@police.ceas1.uc.edu
+
+     --------------------------------------------------------------
+     This is an academic version of ANSYS FLUENT. Usage of this product
+     license is limited to the terms and conditions specified in your ANSYS
+     license form, additional terms section.
+     --------------------------------------------------------------
+Host spawning Node 0 on machine "BME-BANER-01" (win64).
+
+-------------------------------------------------------------------------------
+ID    Hostname      Core  O.S.         PID    Vendor                         
+-------------------------------------------------------------------------------
+n3    BME-BANER-01  4/8  Windows-x64  19352  Intel(R) Core(TM) i7-9700      
+n2    BME-BANER-01  3/8  Windows-x64  23584  Intel(R) Core(TM) i7-9700      
+n1    BME-BANER-01  2/8  Windows-x64  17596  Intel(R) Core(TM) i7-9700      
+n0*   BME-BANER-01  1/8  Windows-x64  24936  Intel(R) Core(TM) i7-9700      
+host  BME-BANER-01       Windows-x64  18444  Intel(R) Core(TM) i7-9700      
+
+MPI Option Selected: intel
+Selected system interconnect: default
+-------------------------------------------------------------------------------
+
+Cleanup script file is C:\\Users\\Research\\Desktop\\CBT_pred\\cases\\exercise\\with_sweating\\case_1\\cleanup-fluent-BME-BANER-01-18444.bat
+Fast-loading "C:\PROGRA~1\ANSYSI~1\v242\fluent\fluent24.2.0\\addons\afd\lib\hdfio.bin"
+Done.
+
+BME-BANER-01 has other FLUENT parallel processes running.                       Process affinity not being set.
+
+Reading from BME-BANER-01:"C:\Users\Research\Desktop\CBT_pred\cases\exercise\with_sweating\case_1\Case1.cas.h5" in NODE0 mode ...
+  Reading mesh ...
+       59946 cells,     3 cell zones ...
+            918 hexahedral cells,  zone id: 8
+          57345 mixed cells,  zone id: 9
+           1683 tetrahedral cells,  zone id: 10
+      127549 faces,     9 face zones ...
+          11168 triangular wall faces,  zone id: 1
+            336 triangular wall faces,  zone id: 2
+             60 triangular wall faces,  zone id: 3
+             60 triangular wall faces,  zone id: 12
+            618 quadrilateral wall faces,  zone id: 4
+            618 quadrilateral wall faces,  zone id: 13
+           2445 quadrilateral interior faces,  zone id: 5
+           3168 triangular interior faces,  zone id: 6
+         109076 triangular interior faces,  zone id: 7
+       14632 nodes,     1 node zone  ...
+  Done.
+
+  Reading data for "transient-temperature" profile.
+
+Checking the existence of compiled "libudf" UDF library for current platform.
+If needed will attempt auto-compilation...
+
+ 	 Make sure that UDF source files are in the directory 
+ 	 that contains your case and data files. If you have 
+ 	 an existing libudf directory, please remove this 
+ 	 directory to ensure that latest files are used. 
+  
+Could not find input files. Found "libudf" library, loading it...
+BME-BANER-01: Opening library "C:\\Users\\Research\\Desktop\\CBT_pred\\cases\\exercise\\with_sweating\\case_1\\libudf"...
+Done.
+
+BME-BANER-01: Opening library "C:\\Users\\Research\\Desktop\\CBT_pred\\cases\\exercise\\with_sweating\\case_1\\libudf"...
+	head_source
+	organ_source
+	muscle_source
+	blood_temperature
+	convection_heat_transfer
+Done.
+
+Building...
+     mesh
+	distributing mesh
+		pairs....,
+		parts....,
+		faces....,
+		nodes....,
+		shadow nodes....,
+		cells....,
+        bandwidth reduction using Reverse Cuthill-McKee: 14875/334 = 44.5359
+     materials,
+     interface,
+     domains,
+	mixture
+     zones,
+	interior-part-muscle
+	interior-part-head
+	interior-part-organs
+	wall-part-head
+	wall-part-muscle
+	interior-part-head-part-muscle
+	interior-part-muscle-part-organs
+	interior-part-head-part-muscle-shadow
+	interior-part-muscle-part-organs-shadow
+	part-head
+	part-muscle
+	part-organs
+     parallel,
+Done.
+
+> (cx-gui-do cx-activate-item "Ribbon*Frame1*Frame4(User-Defined)*Table1*Table3(User Defined)*PushButton2(Named Expressions)")
+(cx-gui-do cx-activate-item "MenuBar*PopupMenuNamed Expressions*Manage...")
+(cx-gui-do cx-set-list-selections "Expression Manager*Table1*Table1*List1(Expression)" '( 9))
+(cx-gui-do cx-activate-item "Expression Manager*Table1*Table1*List1(Expression)")
+(cx-gui-do cx-set-list-selections "Expression Manager*Table1*Table1*List1(Expression)" '( 9 10))
+(cx-gui-do cx-activate-item "Expression Manager*Table1*Table1*List1(Expression)")
+(cx-gui-do cx-set-list-selections "Expression Manager*Table1*Table1*List1(Expression)" '( 9))
+(cx-gui-do cx-activate-item "Expression Manager*Table1*Table1*List1(Expression)")
+(cx-gui-do cx-set-list-selections "Expression Manager*Table1*Table1*List1(Expression)" '( 9 10))
+(cx-gui-do cx-activate-item "Expression Manager*Table1*Table1*List1(Expression)")
+(cx-gui-do cx-set-list-selections "Expression Manager*Table1*Table1*List1(Expression)" '( 9 10 11))
+(cx-gui-do cx-activate-item "Expression Manager*Table1*Table1*List1(Expression)")
+(cx-gui-do cx-set-list-selections "Expression Manager*Table1*Table1*List1(Expression)" '( 9 10))
+(cx-gui-do cx-activate-item "Expression Manager*Table1*Table1*List1(Expression)")
+(cx-gui-do cx-set-list-selections "Expression Manager*Table1*Table1*List1(Expression)" '( 9))
+(cx-gui-do cx-activate-item "Expression Manager*Table1*Table1*List1(Expression)")
+(cx-gui-do cx-set-list-selections "Expression Manager*Table1*Table1*List1(Expression)" '())
+(cx-gui-do cx-activate-item "Expression Manager*Table1*Table1*List1(Expression)")
+(cx-gui-do cx-set-list-selections "Expression Manager*Table1*Table1*List1(Expression)" '( 10))
+(cx-gui-do cx-activate-item "Expression Manager*Table1*Table1*List1(Expression)")
+(cx-gui-do cx-set-list-selections "Expression Manager*Table1*Table1*List1(Expression)" '( 10 11))
+(cx-gui-do cx-activate-item "Expression Manager*Table1*Table1*List1(Expression)")
+(cx-gui-do cx-set-list-selections "Expression Manager*Table1*Table1*List1(Expression)" '( 11))
+(cx-gui-do cx-activate-item "Expression Manager*Table1*Table1*List1(Expression)")
+(cx-gui-do cx-set-list-selections "Expression Manager*Table1*Table1*List1(Expression)" '())
+(cx-gui-do cx-activate-item "Expression Manager*Table1*Table1*List1(Expression)")
+(cx-gui-do cx-set-list-selections "Expression Manager*Table1*Table1*List1(Expression)" '( 11))
+(cx-gui-do cx-activate-item "Expression Manager*Table1*Table1*List1(Expression)")
+(cx-gui-do cx-set-list-selections "Expression Manager*Table1*Table1*List1(Expression)" '())
+(cx-gui-do cx-activate-item "Expression Manager*Table1*Table1*List1(Expression)")
+(cx-gui-do cx-activate-item "Expression Manager*PanelButtons*PushButton1(Close)")
+/exit y
+Auto-Transcript Stop Time:  19:08:15, 11 Mar 2025 Eastern Daylight Time 
+Total Transcript Time: 4 Minute 56 Second.

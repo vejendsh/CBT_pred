@@ -1,54 +1,89 @@
 """
 This script uses Ansys Fluent solver to solve a given case for different values of case parameters.
 The case parameters are defined in the utils.parameters file.
-Journal files are used to update the case parameters and run the case.
-The solved case files are saved in the case_folder_path.
+This implementation uses PyFluent API directly instead of journal files.
 """
+
+import sys
+import os
+from pathlib import Path
+
+# Add the project root directory to the Python path
+project_root = Path(__file__).parent.parent.parent
+sys.path.append(str(project_root))
 
 # Importing necessary libraries
 import ansys.fluent.core as pyfluent  # Python API for Ansys Fluent
-import re  # Regular expressions for text substitution
-import utils.parameters as parameters  # Custom module for parameter handling
 import time  # For timing operations
-from pathlib import Path  # For platform-independent path handling
-from src.config import PARAMS_JOURNAL, RUN_JOURNAL, CASE_DIR, CASE_FILE  # Import path configurations
+import utils.parameters as parameters  # Custom module for parameter handling
+from src.config import CASE_FILE, CASE_DIR  # Import path configurations
 
 
-def update_journal_files(params_journal_path, run_journal_path, new_parameters, file_number):
+def set_input_parameters(solver_session, parameters_dict):
     """
-    Updates the Ansys Fluent journal files with new case parameters.
+    Sets input parameters in Ansys Fluent using PyFluent API.
     
     Args:
-        params_journal_path: Path to the journal file containing case parameters
-        run_journal_path: Path to the journal file containing run instructions for the current case
-        new_parameters: A Dictionary of parameters to update (old_value: new_value pairs)
-        file_number: Case number for the new case file
+        solver_session: The active PyFluent solver session
+        parameters_dict: Dictionary containing parameter names and their values
     """
-    # Open the journal file containing case parameters 
-    with open(params_journal_path, 'r') as file:
-        file_contents = file.read()
+    # Access the parameters in the Fluent session
+    fluent_params = solver_session.parameters
+    
+    # Set each parameter value
+    for param_name, param_value in parameters_dict.items():
+        # Set the parameter value
+        fluent_params.input_parameters[param_name].value = param_value
+        print(f"Set parameter '{param_name}' to '{param_value}'")
 
-    # Replace all old parameter values with new values
-    for old_value, new_value in new_parameters.items():
-        file_contents = re.sub(re.escape(old_value), new_value, file_contents)
 
-    # Write the updated contents back to the parameters journal file
-    with open(params_journal_path, 'w') as file:
-        file.write(file_contents)
+def run_simulation(solver_session, case_number):
+    """
+    Runs a steady-state simulation followed by a transient simulation in Ansys Fluent.
+    
+    Args:
+        solver_session: The active PyFluent solver session
+        case_number: The case number for saving the results
+    """
+    # Set up steady-state simulation
+    print("Setting up steady-state simulation...")
+    solver_session.setup.general.solver.time = "Steady"
+    
+    # Initialize the solution
+    print("Initializing solution...")
+    solver_session.solution.initialization.initialize()
+    
+    # Patch temperature and velocity values
+    print("Patching initial values...")
+    # Patch temperature
+    solver_session.solution.initialization.patch.variable = "temperature"
+    solver_session.solution.initialization.patch.zones = ["fluid", "solid-1", "solid-2"]  # Replace with your actual zone names
+    solver_session.solution.initialization.patch.patch()
+    
+    # Patch velocity
+    solver_session.solution.initialization.patch.variable = "velocity"
+    solver_session.solution.initialization.patch.patch()
+    
+    # Run steady-state calculation
+    print("Running steady-state calculation...")
+    solver_session.solution.run_calculation.calculate()
+    
+    # Switch to transient simulation
+    print("Switching to transient simulation...")
+    solver_session.setup.general.solver.time = "Transient"
+    
+    # Run transient calculation
+    print("Running transient calculation...")
+    solver_session.solution.run_calculation.calculate()
+    
+    # Save the case and data
+    output_file = CASE_DIR / f"Exercise_Case_SteadyState_{case_number}.cas.h5"
+    print(f"Saving results to {output_file}...")
+    solver_session.file.write(file_name=rf"{output_file}")
 
-    # Open the run journal file
-    with open(run_journal_path, 'r') as file:
-        file_contents = file.read()
 
-    # Update the case filename in the run journal
-    new_filename = f"Exercise_Case_SteadyState_{file_number}.cas.h5"
-    file_contents = file_contents.replace(f"Exercise_Case_SteadyState_{file_number-1}.cas.h5", new_filename)
-
-    # Write the updated contents back to the run journal file
-    with open(run_journal_path, 'w') as file:
-        file.write(file_contents)
-
-# start_time = time.time()
+# Start timing the execution
+start_time = time.time()
 
 # Launch Ansys Fluent
 solver_session = pyfluent.launch_fluent(precision=pyfluent.Precision.DOUBLE, dimension=pyfluent.Dimension.THREE,
@@ -57,20 +92,14 @@ solver_session = pyfluent.launch_fluent(precision=pyfluent.Precision.DOUBLE, dim
                                 py=True)
 
 # Read the initial case file
-solver_session.file.read_case(file_name=str(CASE_FILE))
+solver_session.file.read_case(file_name=rf"{CASE_FILE}")
 
-# Update the journal files with new case parameters
-update_journal_files(PARAMS_JOURNAL, RUN_JOURNAL, parameters.dataset_dict[-1], 0)
+# Set parameters and run the initial case
+set_input_parameters(solver_session, parameters.dataset_dict[-1])
+run_simulation(solver_session, 0)
 
-# Read the updated journal files
-solver_session.file.read_journal(file_name_list=[str(PARAMS_JOURNAL), str(RUN_JOURNAL)])
-
-# Exit Ansys Fluent
+# Exit Fluent
 solver_session.exit()
-
-# end_time = time.time()
-# time_taken = end_time - start_time
-# print(f"time_taken: {time_taken}")
 
 # Run the case for all the parameters
 for i in range(parameters.size_data-1):
@@ -79,9 +108,18 @@ for i in range(parameters.size_data-1):
                                             ui_mode="gui",
                                             py=True)
 
+    # Read the previous case file
     case_file = CASE_DIR / f"Exercise_Case_SteadyState_{i}.cas.h5"
-    solver_session.file.read_case(file_name=str(case_file))
-
-    update_journal_files(PARAMS_JOURNAL, RUN_JOURNAL, parameters.dataset_dict[i], i + 1)
-    solver_session.file.read_journal(file_name_list=[str(PARAMS_JOURNAL), str(RUN_JOURNAL)])
+    solver_session.file.read_case(file_name=rf"{case_file}")
+    
+    # Set parameters and run the simulation
+    set_input_parameters(solver_session, parameters.dataset_dict[i])
+    run_simulation(solver_session, i + 1)
+    
+    # Exit Fluent
     solver_session.exit()
+
+# Calculate and print the total execution time
+end_time = time.time()
+time_taken = end_time - start_time
+print(f"Total time taken: {time_taken:.2f} seconds")

@@ -4,8 +4,6 @@
 # metab_muscle
 # metab_organ
 
-
-import ansys.fluent.core as pyfluent
 import glob
 import os
 from ansys.fluent.core.filereader.case_file import CaseFile
