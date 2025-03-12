@@ -13,6 +13,8 @@ import time  # For timing operations
 from pathlib import Path  # For platform-independent path handling
 from src.config import PARAMS_JOURNAL, RUN_JOURNAL, CASE_DIR, CASE_FILE  # Import path configurations
 print("Hello World")
+print("Hello")
+
 
 def update_journal_files(params_journal_path, run_journal_path, new_parameters, file_number):
     """
