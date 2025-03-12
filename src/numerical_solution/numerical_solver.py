@@ -12,7 +12,7 @@ import utils.parameters as parameters  # Custom module for parameter handling
 import time  # For timing operations
 from pathlib import Path  # For platform-independent path handling
 from src.config import PARAMS_JOURNAL, RUN_JOURNAL, CASE_DIR, CASE_FILE  # Import path configurations
-
+print(PARAMS_JOURNAL, RUN_JOURNAL, CASE_DIR, CASE_FILE)
 
 def update_journal_files(params_journal_path, run_journal_path, new_parameters, file_number):
     """
