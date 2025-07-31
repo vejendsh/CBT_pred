@@ -1,6 +1,6 @@
 # Core Body Temperature Prediction (CBT_pred)
 
-Predict human core body temperature under exercise and environmental conditions using a hybrid Computational Fluid Dynamics (CFD) + Deep-Learning surrogate workflow.
+Predict human core body temperature under exercise and varying environmental conditions using a hybrid Computational Fluid Dynamics (CFD) + Deep-Learning surrogate workflow.
 
 This repository automates the generation of CFD data with Ansys Fluent, preprocesses the results, trains a neural-network surrogate model, and evaluates its performance.
 
