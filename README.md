@@ -1,8 +1,8 @@
 # Core Body Temperature Prediction (CBT_pred)
 
-The code in this repository can be used to train a machine learning-based surrogate model that can predict a 60-minute profile of human Core Body Temperature in response to different external thermal conditions. The surrogate model was trained on CFD data generated from ANSYS Fluent 2024 R1
+The code in this repository can be used to train a machine learning-based surrogate model that can predict a 60-minute profile of human Core Body Temperature in response to different external thermal conditions.
 
- The generation of CFD data, its preprocessing, training of the neural-network surrogate model, and evaluation of its performance is handled.
+The surrogate model was trained on CFD data generated from ANSYS Fluent 2024 R1. The generation of CFD data, its preprocessing, training of the neural-network surrogate model, and evaluation of its performance is handled in this repository.
 
 ---
 ## Table of Contents
