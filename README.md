@@ -2,7 +2,7 @@
 
 The code in this repository can be used to train a machine learning-based surrogate model that can forecast how a human’s Core Body Temperature (CBT) will evolve over the next 60 minutes in different thermal environments.
 
-CFD data was used to train the surrogate model which was generated using ANSYS Fluent 2024 R1. The generation of CFD data and its preprocessing, training of the surrogate model, and evaluation of its performance is handled.
+CFD data was used to train the surrogate model which was generated using ANSYS Fluent 2024 R1. The generation of CFD data, its preprocessing, training of the surrogate model, and evaluation of its performance is handled.
 
 ---
 ## Table of Contents
