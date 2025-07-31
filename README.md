@@ -1,6 +1,6 @@
 # Core Body Temperature Prediction (CBT_pred)
 
-The code in this repository can be used to train a machine learning-based surrogate model that can predict a 60-minute resposne of human Core Body Temperature to different external thermal conditions. The surrogate model was trained on CFD data generated from ANSYS Fluent 2024 R1
+The code in this repository can be used to train a machine learning-based surrogate model that can predict a 60-minute profile of human Core Body Temperature in response to different external thermal conditions. The surrogate model was trained on CFD data generated from ANSYS Fluent 2024 R1
 
  The generation of CFD data, its preprocessing, training of the neural-network surrogate model, and evaluation of its performance is handled.
 
@@ -21,10 +21,10 @@ The code in this repository can be used to train a machine learning-based surrog
 
 ---
 ## 1. Project Overview
-Predicting Core Body Temperature through traditional CFD computations is time consuming. This makes them non-applicable for heat-related injury prevention in frontline workplaces exposed to extreme temperatures. However, the data generated from the CFD computations can be used to train a surrogate model which understands the patterns in CFD data to quickly predict the Core Body Temperature. To create the surrogate model, we: 
-1. Use **Ansys Fluent 2024 R1** to perform thousands of CFD computations to predict Core Body Temperature profiles of humans of different physiologies exposed to different external conditions.
-2. Collect the data - consists of thousands of Core Body Temperature profiles for different metabolic rates of head, muscle, and internal organs; ambient temperature, and heat transfer coefficient - and compress it into tensors
-3. Train a fully-connected neural network to map the 5-dimensional input parameter vector → 100-point core body temperature curve (via FFT domain).
+Predicting Core Body Temperature in resposne to different external thermal conditions through traditional CFD computations is time consuming. This makes CFD non-applicable for heat-injury prediction in frontline workers exposed to extreme temperatures. However, the CFD data can be used to train surrogate models which learn the relationship in the data and predict Core Body Temperature orders of magnitude faster. To create such surrogate model, we: 
+1. Use **Ansys Fluent 2024 R1** to perform thousands of CFD computations to predict Core Body Temperature profiles of humans of different physiologies exposed to different thermal conditions.
+2. Collect the data - consists of Core Body Temperature profiles of thousands of different humans with different metabolic rates of head, muscle, and internal organs exposed to different thermal conditions characterized by different ambient temperatures and heat transfer coefficient - and compress them into tensors. 
+3. Train a fully-connected neural network to map the 5-dimensional input parameter vector (metabolic rate of head, muscle, internal organs, ambient temperature, and heat transfer coefficient) → 100-point discretized core body temperature profile (via FFT domain).
 
 Once trained, inference takes milliseconds on CPU/GPU without invoking Fluent.
 
