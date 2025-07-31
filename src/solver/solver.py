@@ -1,6 +1,6 @@
 """
-This script uses Ansys Fluent solver to solve a given case for different values of case parameters.
-The case parameters are defined in the utils.parameters file.
+This script automates the process of running multiple ANSYS Fluent cases in serial.
+The case parameters of different cases are defined in the utils.parameters file.
 Journal files are used to update the case parameters and run the case.
 The solved case files are saved in the case_folder_path.
 """
