@@ -1,6 +1,6 @@
 # Core Body Temperature Prediction (CBT_pred)
 
-The code in this repository can be used to train a machine learning-based surrogate model that can predict a 60-minute profile of human Core Body Temperature evolution in response to external heat. The surrogate model is trained on CFD data generated using ANSYS Fluent 2024 R1. 
+The code in this repository can be used to train a machine learning-based surrogate model that can predict a 60-minute profile of human Core Body Temperature in response to external heat. The surrogate model was trained on CFD data generated from ANSYS Fluent 2024 R1
 
 This repository automates the generation of CFD data, preprocesses the results, trains a neural-network surrogate model, and evaluates its performance.
 
@@ -22,7 +22,7 @@ This repository automates the generation of CFD data, preprocesses the results, 
 ---
 ## 1. Project Overview
 Predicting Core Body Temperature through traditional CFD computations is time consuming. This makes them non-applicable for heat-related injury prevention in frontline workplaces exposed to extreme temperatures. However, the data generated from the CFD computations can be used to train a surrogate model which understands the patterns in CFD data to quickly predict the Core Body Temperature. To create the surrogate model, we: 
-1. Use **Ansys Fluent** to perform thousands of CFD computations to predict Core Body Temperature profiles of humans of different physiologies exposed to different external conditions.
+1. Use **Ansys Fluent 2024 R1** to perform thousands of CFD computations to predict Core Body Temperature profiles of humans of different physiologies exposed to different external conditions.
 2. Collect the data - consists of thousands of Core Body Temperature profiles for different metabolic rates of head, muscle, and internal organs; ambient temperature, and heat transfer coefficient - and compress it into tensors
 3. Train a fully-connected neural network to map the 5-dimensional input parameter vector → 100-point core body temperature curve (via FFT domain).
 
