@@ -74,9 +74,6 @@ $ python -m venv .venv && source .venv/Scripts/activate  # Windows PowerShell: .
 # Install Python dependencies
 $ pip install -r requirements.txt   # see section below if file is not present yet
 ```
-> 📦  The repository currently lists dependencies inline in each script.  Create a `requirements.txt` with at least:
-> `ansys-fluent-core tqdm torch wandb matplotlib numpy`
-
 ### One-command demo (inference only)
 A pre-trained model is provided as `model.pth` (≈2 MB).  Run:
 ```bash
