@@ -21,8 +21,8 @@ This repository automates the generation of CFD data with Ansys Fluent, preproce
 
 ---
 ## 1. Project Overview
-Traditional whole-body thermoregulation simulations require heavy CFD computations.  To accelerate what-if studies we:
-1. Launch **Ansys Fluent** batches for thousands of parameter combinations (metabolic rates, ambient temperature, convective coefficient, …).
+Traditional whole-body thermoregulation simulations require heavy CFD computations. This project uses machine learning to create a surrogate model which can accelerate the process. It is done as follows:
+1. Use **Ansys Fluent** to solve thousands of cases characterized by unique parameter combinations (metabolic rates, ambient temperature, convective coefficient, …).
 2. Collect solver outputs (core temperature time series) and compress them into tensors.
 3. Train a fully-connected neural network to map the 5-dimensional input parameter vector → 100-point temperature curve (via FFT domain).
 
@@ -74,24 +74,6 @@ $ python -m venv .venv && source .venv/Scripts/activate  # Windows PowerShell: .
 # Install Python dependencies
 $ pip install -r requirements.txt   # see section below if file is not present yet
 ```
-### One-command demo (inference only)
-A pre-trained model is provided as `model.pth` (≈2 MB).  Run:
-```bash
-python - << 'PY'
-import torch, numpy as np
-from src.model.model import NeuralNetwork
-from src.utils.utils import min_max_normalize
-# Example input [metab_head, metab_muscle, metab_organs, T_amb, h]
-x = torch.tensor([[9000, 500, 1400, 25, 7.5]])
-model = torch.load('model.pth', map_location='cpu')
-model.eval()
-with torch.no_grad():
-    pred = model(min_max_normalize(x))
-    print('Predicted FFT shape:', pred.shape)
-PY
-```
-The output can be inverse-FFT’d to obtain the 30-minute temperature profile.
-
 ---
 ## 4. Detailed Workflow
 ### 4.1 Parameter Sampling & CFD Case Generation (`src/utils/parameters.py`, `src/solver/solver.py`)
@@ -100,8 +82,6 @@ The output can be inverse-FFT’d to obtain the 30-minute temperature profile.
   1. Edits `change_parameter.log` to inject new values.
   2. Runs `steady_and_transient.log` inside a Fluent session.
   3. Saves the converged case file as `Exercise_Case_SteadyState_i.cas.h5`.
-
-> ⚠️  Running Fluent in batch mode can take hours.  Ensure you have a valid licence and adjust `processor_count`.
 
 ### 4.2 Data Pre-processing (`src/data_preprocessing/data_preprocessor.py`)
 * Scans the `Run_*` folders produced by Fluent.
@@ -135,8 +115,6 @@ with `tanh` activations.  The 102 outputs represent the real & imaginary FFT coe
 ---
 ## 6. Results & Visualisations
 Training metrics and comparison plots can be found in the `wandb` run (if enabled) or generated locally via `compare()`.
-
-![Example Plot](docs/example_plot.png) <!-- optional if you add docs -->
 
 ---
 ## 7. Contributing
