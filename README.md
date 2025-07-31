@@ -1,8 +1,8 @@
 # Core Body Temperature Prediction (CBT_pred)
 
-Predict human core body temperature under exercise and varying environmental conditions using a hybrid Computational Fluid Dynamics (CFD) + Deep-Learning surrogate workflow.
+The code in this repository can be used to train a machine learning-based surrogate model that can predict a 60-minute profile of human Core Body Temperature evolution in response to external heat. The surrogate model is trained on CFD data generated using ANSYS Fluent 2024 R1. 
 
-This repository automates the generation of CFD data with Ansys Fluent, preprocesses the results, trains a neural-network surrogate model, and evaluates its performance.
+This repository automates the generation of CFD data, preprocesses the results, trains a neural-network surrogate model, and evaluates its performance.
 
 ---
 ## Table of Contents
@@ -21,10 +21,10 @@ This repository automates the generation of CFD data with Ansys Fluent, preproce
 
 ---
 ## 1. Project Overview
-Traditional whole-body thermoregulation simulations require heavy CFD computations. This project uses machine learning to create a surrogate model which can accelerate the process. It is done as follows:
-1. Use **Ansys Fluent** to solve thousands of cases characterized by unique parameter combinations (metabolic rates, ambient temperature, convective coefficient, …).
-2. Collect solver outputs (core temperature time series) and compress them into tensors.
-3. Train a fully-connected neural network to map the 5-dimensional input parameter vector → 100-point temperature curve (via FFT domain).
+Predicting Core Body Temperature through traditional CFD computations is time consuming. This makes them non-applicable for heat-related injury prevention in frontline workplaces exposed to extreme temperatures. However, the data generated from the CFD computations can be used to train a surrogate model which understands the patterns in CFD data to quickly predict the Core Body Temperature. To create the surrogate model, we: 
+1. Use **Ansys Fluent** to perform thousands of CFD computations to predict Core Body Temperature profiles of humans of different physiologies exposed to different external conditions.
+2. Collect the data - consists of thousands of Core Body Temperature profiles for different metabolic rates of head, muscle, and internal organs; ambient temperature, and heat transfer coefficient - and compress it into tensors
+3. Train a fully-connected neural network to map the 5-dimensional input parameter vector → 100-point core body temperature curve (via FFT domain).
 
 Once trained, inference takes milliseconds on CPU/GPU without invoking Fluent.
 
