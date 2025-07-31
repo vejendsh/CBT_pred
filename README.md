@@ -21,7 +21,7 @@ CFD data was used to train the surrogate model which was generated using ANSYS F
 
 ---
 ## 1. Project Overview
-Predicting the Core Body Temperature of humans in different thermal environments through traditional CFD computations is time consuming. This makes them infeasible for workplace heat-injury prevention in frontline workers exposed to extreme temperatures. However, the CFD data can be used to train surrogate models which learn the relationship in the data and predict Core Body Temperature orders of magnitude faster. Such surrogate models can be useful in workplace health monitoring and effecive heat-injury prevention. To create such a surrogate model, we: 
+Predicting the Core Body Temperature of humans in different thermal environments through traditional CFD computations is time consuming. This makes them infeasible for workplace heat-injury prevention in frontline workers exposed to extreme temperatures. However, the CFD data can be used to train surrogate models which learn the relationship in the data and predict Core Body Temperature orders of magnitude faster. Such surrogate models can be useful in workplace health monitoring and effective heat-injury prevention. To create such a surrogate model, we: 
 1. Use **Ansys Fluent 2024 R1** to perform thousands of CFD computations to predict Core Body Temperature profiles of humans of different physiologies exposed to different thermal conditions.
 2. Collect the data - consists of Core Body Temperature profiles of thousands of different humans with different metabolic rates of head, muscle, and internal organs; exposed to different thermal conditions characterized by different ambient temperatures and heat transfer coefficients - and compress them into tensors. 
 3. Train a fully-connected neural network to map the 5-dimensional input parameter vector (metabolic rate of head, muscle, internal organs, ambient temperature, and heat transfer coefficient) → 100-point discretized core body temperature profile (via FFT domain).
@@ -77,7 +77,7 @@ $ pip install -r requirements.txt   # see section below if file is not present y
 ---
 ## 4. Detailed Workflow
 ### 4.1 Parameter Sampling & CFD Case Generation (`src/utils/parameters.py`, `src/solver/solver.py`)
-* `parameters.py` randomly samples **4000** points in the 5-D input space and stores them in `dataset_dict`.
+* `parameters.py` randomly samples **4000** points in the 5-D input parameter space and stores them in `dataset_dict`.
 * `solver.py` loops over these points:
   1. Edits `change_parameter.log` to inject new values.
   2. Runs `steady_and_transient.log` inside a Fluent session.
