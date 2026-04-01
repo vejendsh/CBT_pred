@@ -1,0 +1,6 @@
+ansys-fluent-core>=0.8
+torch>=2.0
+numpy>=1.23
+tqdm>=4.60
+wandb>=0.15
+matplotlib>=3.7 
