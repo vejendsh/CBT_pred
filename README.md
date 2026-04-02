@@ -44,7 +44,7 @@ The project combines:
 
 - `src/utils/parameters.py`
   - Samples parameter sets (metabolic rates, ambient temperature, convection coefficient) using uniform random ranges.
-  - Builds a dictionary used by the numerical solver to replace placeholder values in `change_parameter.log`.
+  - Exposes `expression_strings_for_sample(k)` so the numerical solver can overwrite the five Fluent **Definition** lines in `change_parameter.log` by position 
 
 - `cases/exercise/with_sweating/case_1/case1_parametrized.c`
   - Fluent UDF that defines thermal source terms and boundary profile behavior (convection + sweating term).
@@ -92,6 +92,9 @@ pip install torch numpy matplotlib tqdm wandb ansys-fluent-core
 
 ## Setup Notes (Important)
 
+**`change_parameter.log` format:**  
+The numerical solver rewrites the **five** `cx-set-expression-entry` lines for **Parameter Expression … ExpressionEntry3(Definition)** in fixed order (head → muscle → organ → ambient → convection).  Keep the same journal structure (those five lines must still be present so the regex can find them).
+
 Before running scripts, verify these paths/settings:
 
 - `src/config.py` points `CASE_DIR` to:
@@ -113,12 +116,12 @@ Before running scripts, verify these paths/settings:
 Run:
 
 ```bash
-python src/numerical_solution/numerical_solver.py
+python -m src/numerical_solution/numerical_solver.py
 ```
 
 What it does:
 - Loads base case (`Exercise_Case_SteadyState.cas.h5`)
-- Updates input parameters in `change_parameter.log`
+- Updates input parameters in `change_parameter.log` (overwrites the five Definition lines; see **Setup Notes**)
 - Executes journals (`change_parameter.log`, `steady_and_transient.log`)
 - Saves sequential solved cases
 
@@ -127,7 +130,7 @@ What it does:
 Run:
 
 ```bash
-python src/data_preprocessing/data_preprocessor.py
+python -m src/data_preprocessing/data_preprocessor.py
 ```
 
 What it does:
@@ -142,7 +145,7 @@ What it does:
 Run:
 
 ```bash
-python src/training/training.py
+python -m src/training/training.py
 ```
 
 Typical flow in the script:

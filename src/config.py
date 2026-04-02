@@ -7,7 +7,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).parent.parent
 
 # Define paths relative to the base directory
-CASE_DIR = BASE_DIR / "cases" / "exercise" / "with_sweating" / "case1"
+CASE_DIR = BASE_DIR / "cases" / "exercise" / "with_sweating" / "case_1"
 
 # Journal file paths
 PARAMS_JOURNAL = CASE_DIR / "change_parameter.log"

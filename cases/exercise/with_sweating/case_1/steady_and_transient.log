@@ -25,5 +25,5 @@
 (cx-gui-do cx-activate-item "Ribbon*Frame1*Frame5(Solution)*Table1*Table3(Run Calculation)*PushButton5(Run Calculation)")
 (cx-gui-do cx-activate-item "Run Calculation*Table1*Table9(Solution Advancement)*Table1*PushButton1(Calculate)")
 (cx-gui-do cx-activate-item "MenuBar*WriteSubMenu*Case & Data...")
-(cx-gui-do cx-set-file-dialog-entries "Select File" '( "Exercise_Case_SteadyState_-1.cas.h5") "CFF Case/Data Files (*.cas.h5 *.dat.h5 )")
+(cx-gui-do cx-set-file-dialog-entries "Select File" '( "Exercise_Case_SteadyState_0.cas.h5") "CFF Case/Data Files (*.cas.h5 *.dat.h5 )")
 (cx-gui-do cx-activate-item "MenuBar*WriteSubMenu*Stop Journal")

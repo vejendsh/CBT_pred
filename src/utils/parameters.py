@@ -7,6 +7,7 @@
 # - Heat transfer coefficient
 
 import torch
+
 size_data = 4000
 metab_head_min = 7527.6
 metab_head_max = 10922.4
@@ -27,6 +28,22 @@ h_data = torch.empty(size_data).uniform_(h_min, h_max)
 
 dataset = torch.stack([metab_head_data, metab_mus_data, metab_org_data, T_amb_data, h_data])
 
-dataset_dict = {n: {str(dataset[i, n].item()): str(dataset[i, n + 1].item()) for i in range(dataset.shape[0])} for n in range(dataset.shape[1] - 1)}
-dict_append = {-1: {"000": str(dataset[0, 0].item()), "001": str(dataset[1, 0].item()), "002": str(dataset[2, 0].item()), "003": str(dataset[3, 0].item()), "004": str(dataset[4, 0].item())}}
-dataset_dict.update(dict_append)
+
+def fmt_param(j: int, val) -> str:
+    """Format parameter j for Fluent's expression Definition line (units + spacing match GUI)."""
+    x = float(val)
+    s = f"{x:.15g}"
+    if j == 0:
+        return f"{s}[W/m^3]"
+    if j in (1, 2):
+        return f"{s} [W/m^3]"
+    if j == 3:
+        return f"{s} [C]"
+    if j == 4:
+        return f"{s} [W/m^2 K]"
+    raise IndexError(f"Parameter index j must be 0..4, got {j}")
+
+
+def expression_strings_for_sample(sample_idx: int) -> list[str]:
+    """The five Definition strings for dataset column ``sample_idx``."""
+    return [fmt_param(j, dataset[j, sample_idx].item()) for j in range(5)]

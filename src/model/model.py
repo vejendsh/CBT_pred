@@ -2,7 +2,7 @@ import torch.nn as nn
 import torch
 
 class NeuralNetwork(nn.Module):
-    def __init__(self):
+    def __init__(self, out_features: int = 102):
         super().__init__()
         self.linear_relu_stack = nn.Sequential(
             nn.Linear(5, 32),
@@ -23,7 +23,7 @@ class NeuralNetwork(nn.Module):
             nn.Tanh(),
             nn.Linear(64, 32),
             nn.Tanh(),
-            nn.Linear(32, 102),
+            nn.Linear(32, out_features),
             nn.Tanh()
         )
 

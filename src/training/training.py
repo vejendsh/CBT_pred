@@ -3,9 +3,10 @@ import torch.nn as nn
 from torch.optim.lr_scheduler import LambdaLR
 from torch.utils.data import Dataset, DataLoader
 from torch import optim
-from model import NeuralNetwork
+from src.model.model import NeuralNetwork
+
 import wandb
-import utils
+import src.utils.utils as utils
 from tqdm import tqdm
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -22,26 +23,32 @@ class CBTDataset(Dataset):
     def __getitem__(self, idx):
         return self.input_data[idx], self.output_data[idx]
 
-input_data =  torch.load("input_data_3.pt")
-print(input_data[11])
-output_data = torch.load("output_3.pt")[:, :, 1]
+input_data = torch.load("input_data.pt")
+print("input_data: ", input_data[0:3])
+output_data = torch.load("output.pt")[:, :, 1].float().to(device)
+# Core temperature vs time: (N, T); RFFT length depends on T → 2 * (T//2 + 1) real+imag coeffs
+N_TIME = output_data.shape[1]
 input_data_norm = utils.min_max_normalize(input_data).to(device)
-output_data = torch.fft.rfft(output_data, dim=1).to(device)
-real = output_data.real
-imag = output_data.imag
-output_data_norm = torch.nan_to_num(utils.min_max_normalize(torch.stack([real, imag], dim=-1).view(970, -1)), nan=0)
-output_min = torch.min((torch.stack([real, imag], dim=-1).view(970, -1)), dim=0).values
-output_max = torch.max((torch.stack([real, imag], dim=-1).view(970, -1)), dim=0).values
+
+output_fft = torch.fft.rfft(output_data, dim=1)
+real = output_fft.real
+imag = output_fft.imag
+fft_flat = torch.stack([real, imag], dim=-1).reshape(output_data.shape[0], -1)
+output_min = torch.min(fft_flat, dim=0).values
+output_max = torch.max(fft_flat, dim=0).values
+output_data_norm = torch.nan_to_num(utils.min_max_normalize(fft_flat), nan=0)
+
+OUT_FFT_DIM = fft_flat.shape[1]
 
 
-train_size = int((9/10)*(input_data.shape[0]))
-test_size = int((1/10)*(input_data.shape[0]))
+train_size = int((2/3)*(input_data.shape[0]))
+test_size = int((1/3)*(input_data.shape[0]))
 dataset_size = int(train_size + test_size)
 
 train_dataset = CBTDataset(input_data_norm[:train_size], output_data_norm[:train_size])
 test_dataset = CBTDataset(input_data_norm[train_size:], output_data_norm[train_size:])
 
-batch_size = 128
+batch_size = 1
 
 train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 test_dataloader = DataLoader(test_dataset, batch_size=test_size, shuffle=False)
@@ -65,6 +72,8 @@ def run_epoch(dataloader, epoch, model, loss_fn, optimizer, scheduler, mode="tra
             # Compute prediction and loss
             optimizer.zero_grad()
             pred = model(X)
+            print("pred : ", pred)
+            print("y : ", y)
             loss_node = loss_fn(pred, y)
             loss_accum += loss_node
             step += 1
@@ -92,15 +101,15 @@ def run_epoch(dataloader, epoch, model, loss_fn, optimizer, scheduler, mode="tra
             del loss_node
 
 import time
+
 def train_model(epochs):
-    model = NeuralNetwork().to(device)
+    model = NeuralNetwork(out_features=OUT_FFT_DIM).to(device)
     loss_fn = nn.MSELoss(reduction="sum")
     # loss_fn = utils.CustomLoss()
     learning_rate = 1e-3
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
     reducePScheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', factor=0.5, patience=1000, cooldown=1000)
-    lambda_func = lambda epoch: 1.0
-    scheduler = LambdaLR(optimizer, lr_lambda=lambda_func)
+
     start_time = time.time()
     for epoch in range(epochs):
         run_epoch(train_dataloader, epoch, model, loss_fn, optimizer, reducePScheduler, mode="train")
@@ -114,9 +123,12 @@ def train_model(epochs):
     return model
 
 
-num_epochs = 4000
+num_epochs = 1000
+
+# Uncomment to train the model
 # trained_model = train_model(num_epochs)
 # torch.save(trained_model, 'model.pth')
+
 
 
 from matplotlib import pyplot as plt
@@ -128,7 +140,7 @@ from matplotlib.offsetbox import AnchoredText
 def compare(n=80):
 
     for i in range(n):
-        model = torch.load('model.pth')
+        model = torch.load("model.pth", weights_only=False)
         model.eval()
         input, output = test_dataset[i]
         pred = model(input)
@@ -144,16 +156,17 @@ def compare(n=80):
         output_imag_part = output_unnorm[1::2]
         output_fft = torch.complex(output_real_part, output_imag_part)
 
-        pred_final = torch.fft.irfft(pred_fft, 100)
-        output_final = torch.fft.irfft(output_fft, 100)
+        pred_final = torch.fft.irfft(pred_fft, N_TIME)
+        output_final = torch.fft.irfft(output_fft, N_TIME)
 
-        x = np.linspace(0, 30, 100)
+        x = np.linspace(0, 30, N_TIME)
 
         mpl.rcParams["font.size"] = 19
-        plt.plot(x, output_final.detach().numpy() - 273.15, "-", lw=1.5, label="Calculated Core Body Temperature (Computational Model)")
-        plt.plot(x, pred_final.detach().numpy() - 273.15, "--", lw=2, label="Predicted Core Body Temperature (Surrogate Model)")
+        plt.plot(x, output_final.detach().numpy() - 273.15, "*", markersize=10, label="Calculated Core Body Temperature (Computational Model)")
+        plt.plot(x, pred_final.detach().numpy() - 273.15, "*", markersize=10, label="Predicted Core Body Temperature (Surrogate Model)")
         plt.xlabel("Time (min)")
         plt.ylabel("Core Body Temperature ($^\circ$C)")
+        plt.ylim(35, 40)
         plt.grid(visible=True, which='major', linestyle='--', linewidth=0.7)
         # plt.grid(visible=True, which='minor', linestyle=':', linewidth=0.5)
         plt.minorticks_on()
@@ -162,12 +175,14 @@ def compare(n=80):
         plt.pause(1)
         plt.close()
 
+# Uncomment to compare the model
+compare()
 
-# compare()
-x = np.linspace(0, 30, 100)
+
+x = np.linspace(0, 30, N_TIME)
 # Computation of MSE in testing dataset
 def mse():
-    model = torch.load('model.pth')
+    model = torch.load("model.pth", weights_only=False)
     model.eval()
     input, output = test_dataset.input_data, test_dataset.output_data
     start_time = time.time()
@@ -218,5 +233,5 @@ def mse():
     # print(f"pearson r coefficient:{corr_matrix}")
 
 
-
+# # Uncomment to calculate the mse
 # mse()
