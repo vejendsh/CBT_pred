@@ -66,6 +66,9 @@ The project combines:
 - `src/utils/utils.py`
   - Utility helpers for tensor save behavior, normalization, file sorting, and optional custom loss.
 
+- 'src/utils/parameters.py' 
+  - This is where you change the input parameters to sweep the ANSYS Fluent model
+
 ## Requirements
 
 ## 1) System/Software
@@ -147,6 +150,10 @@ Run:
 ```bash
 python -m src/training/training.py
 ```
+
+To train the model, uncomment lines 129-130 and comment out line 179
+To test the model, comment out lines 129-130 and uncomment line 179
+
 
 Typical flow in the script:
 - Load tensors
